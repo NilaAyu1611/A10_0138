@@ -18,3 +18,13 @@ data class Pekerja(
     val jabatan: String,
     val kontak_pekerja: String
 )
+
+//tabel panen
+@Serializable
+data class Panen(
+    val id_panen: String,
+    val id_tanaman: String,
+    val tanggal_panen: String,
+    val jumlah_panen: String,
+    val keterangan: String
+)
