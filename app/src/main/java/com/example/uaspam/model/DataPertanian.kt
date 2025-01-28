@@ -9,3 +9,12 @@ data class Tanaman(
     val periode_tanam: String,
     val deskripsi_tanaman: String
 )
+
+//Tabel pekerja
+@Serializable
+data class Pekerja(
+    val id_pekerja: String,
+    val nama_pekerja: String,
+    val jabatan: String,
+    val kontak_pekerja: String
+)
