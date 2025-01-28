@@ -28,3 +28,13 @@ data class Panen(
     val jumlah_panen: String,
     val keterangan: String
 )
+
+//tabel aktivitaspertanian
+@Serializable
+data class AktivitasPertanian(
+    val id_aktivitas: String,
+    val id_tanaman: String,
+    val id_pekerja: String,
+    val tanggal_aktivitas: String,
+    val deskripsi_aktivitas: String
+)
