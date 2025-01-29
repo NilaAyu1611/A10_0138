@@ -12,6 +12,11 @@ import com.example.uaspam.ui.home.Cover
 import com.example.uaspam.ui.home.DestinasiHalamanCover
 import com.example.uaspam.ui.home.DestinasiHalamanUtama
 import com.example.uaspam.ui.home.PertanianApp
+import com.example.uaspam.ui.home.view.panen.DestinasiHomePanen
+import com.example.uaspam.ui.home.view.panen.DestinasiInsertPanen
+import com.example.uaspam.ui.home.view.panen.EntryPnView
+import com.example.uaspam.ui.home.view.panen.HomePanenView
+import com.example.uaspam.ui.home.view.panen.UpdatePanenView
 import com.example.uaspam.ui.home.view.pekerja.DestinasiHomePekerja
 import com.example.uaspam.ui.home.view.pekerja.DestinasiInsertPekerja
 import com.example.uaspam.ui.home.view.pekerja.DetailPekerjaView
@@ -171,6 +176,58 @@ fun PengelolaHalaman(
                 }
             )
         }
+
+
+
+
+        //----------------------------------------------------------------------------------------------------------------------------
+
+
+        // Halaman Home Panen
+        composable(DestinasiHomePanen.route) {
+            HomePanenView(
+                navigateBack = {
+                    navController.navigate(DestinasiHalamanUtama.route) {
+                        popUpTo(DestinasiHalamanUtama.route) { inclusive = true }
+                    }
+                },
+                onEditClick = { id_panen -> // Pastikan parameter ini diteruskan
+                    navController.navigate("update_panen/$id_panen")
+                }
+
+
+            )
+        }
+
+        // Halaman Insert Panen
+        composable(
+            route = "${DestinasiInsertPanen.route}/{id_tanaman}",
+            arguments = listOf(navArgument("id_tanaman") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id_tanaman = backStackEntry.arguments?.getString("id_tanaman") ?: ""
+            EntryPnView(
+                id_tanaman = id_tanaman,
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
+
+        // Halaman Update
+        composable(
+            route = "update_panen/{id_panen}",
+            arguments = listOf(navArgument("id_panen") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id_panen = backStackEntry.arguments?.getString("id_panen") ?: ""
+            UpdatePanenView(
+                id_panen = id_panen,
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
 
     }
 }
