@@ -1,6 +1,38 @@
 package com.example.uaspam.ui.home.viewmodel.aktivitaspertanian
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.uaspam.model.AktivitasPertanian
+import com.example.uaspam.repository.AktivitaspertanianRepository
+import kotlinx.coroutines.launch
+
+// ViewModel untuk mengatur data dan logika form tambah mahasiswa
+class InsertAktivitasPertanianViewModel(private val ak: AktivitaspertanianRepository): ViewModel() {
+
+    // Data untuk menyimpan keadaan form (seperti input dari pengguna)
+    var insertakUiState by mutableStateOf(InsertakUiState())
+        private set
+
+    // Fungsi untuk mengubah data form ketika ada input dari pengguna
+    fun updateInsertAkState(insertakUiEvent: InsertakUiEvent) {
+        insertakUiState = InsertakUiState(insertakUiEvent = insertakUiEvent) // Perbarui data berdasarkan event
+    }
+
+    // Fungsi untuk menambahkan data mahasiswa ke database
+    suspend fun insertAk() {
+        viewModelScope.launch { // Menjalankan proses di latar belakang (tidak mengganggu UI)
+            try {
+                // Mengambil data dari form dan mengirimnya ke repository
+                ak.insertAktivitasPertanian(insertakUiState.insertakUiEvent.toAk())
+            }catch (e:Exception) {
+                e.printStackTrace() // Menangani error jika terjadi masalah
+            }
+        }
+    }
+}
 
 // Menyimpan state form input mahasiswa
 data class InsertakUiState(
