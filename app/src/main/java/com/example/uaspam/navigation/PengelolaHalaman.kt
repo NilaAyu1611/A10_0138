@@ -12,6 +12,12 @@ import com.example.uaspam.ui.home.Cover
 import com.example.uaspam.ui.home.DestinasiHalamanCover
 import com.example.uaspam.ui.home.DestinasiHalamanUtama
 import com.example.uaspam.ui.home.PertanianApp
+import com.example.uaspam.ui.home.view.pekerja.DestinasiHomePekerja
+import com.example.uaspam.ui.home.view.pekerja.DestinasiInsertPekerja
+import com.example.uaspam.ui.home.view.pekerja.DetailPekerjaView
+import com.example.uaspam.ui.home.view.pekerja.EntryPkjView
+import com.example.uaspam.ui.home.view.pekerja.HomePekerjaView
+import com.example.uaspam.ui.home.view.pekerja.UpdatePekerjaView
 import com.example.uaspam.ui.home.view.tanaman.DestinasiEntry
 import com.example.uaspam.ui.home.view.tanaman.DestinasiHomeTanaman
 import com.example.uaspam.ui.home.view.tanaman.DetailTanamanView
@@ -105,3 +111,66 @@ fun PengelolaHalaman(
                 }
             )
         }
+
+
+        //----------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Halaman Home Pekerja
+        composable(DestinasiHomePekerja.route) {
+            HomePekerjaView(
+                navigateBack = {
+                    navController.navigate(DestinasiHalamanUtama.route) {
+                        popUpTo(DestinasiHalamanUtama.route) { inclusive = true }
+                    }
+                },
+                navigateToItemEntry = { navController.navigate(DestinasiInsertPekerja.route) }, // Navigasi ke EntryMhsScreen
+                onDetailClick = { id_pekerja ->
+                    navController.navigate("detail_pekerja/$id_pekerja") // Navigasi ke halaman detail dengan
+                }
+            )
+        }
+
+        // Halaman Insert Pekerja
+        composable(DestinasiInsertPekerja.route) {
+            EntryPkjView(navigateBack = {
+                navController.navigate(DestinasiHomePekerja.route) { // Navigasi kembali ke HomeScreen
+                    popUpTo(DestinasiHomePekerja.route) {
+                        inclusive = true // Bersihkan layar sebelumnya
+                    }
+                }
+            })
+        }
+
+        // Halaman Update pkj
+        composable(
+            route = "update_pekerja/{id_pekerja}",
+            arguments = listOf(navArgument("id_pekerja") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id_pekerja = backStackEntry.arguments?.getString("id_pekerja") ?: ""
+            UpdatePekerjaView(
+                id_pekerja = id_pekerja,
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
+        // Halaman Detailpkj
+        composable(
+            route = "detail_pekerja/{id_pekerja}",
+            arguments = listOf(navArgument("id_pekerja") { type = NavType.StringType }) // Definisikan parameter ""
+        ) { backStackEntry ->
+            val id_pekerja = backStackEntry.arguments?.getString("id_pekerja") ?: "" // Ambil nilai dari parameter
+            DetailPekerjaView(
+                id_pekerja = id_pekerja,
+                navigateEditPekerja = { editId_pekerja ->
+                    navController.navigate("update_pekerja/$editId_pekerja")                   // Navigasi ke halaman update dengan
+                },
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
+    }
+}
