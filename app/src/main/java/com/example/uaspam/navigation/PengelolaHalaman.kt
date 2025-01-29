@@ -12,6 +12,12 @@ import com.example.uaspam.ui.home.Cover
 import com.example.uaspam.ui.home.DestinasiHalamanCover
 import com.example.uaspam.ui.home.DestinasiHalamanUtama
 import com.example.uaspam.ui.home.PertanianApp
+import com.example.uaspam.ui.home.view.aktivitaspertanian.DestinasiHomeAktivitasPertanian
+import com.example.uaspam.ui.home.view.aktivitaspertanian.DestinasiInsertAktivitasPertanian
+import com.example.uaspam.ui.home.view.aktivitaspertanian.DetailAktivitasPertanianView
+import com.example.uaspam.ui.home.view.aktivitaspertanian.EntryAkView
+import com.example.uaspam.ui.home.view.aktivitaspertanian.HomeAktivitasPertanianView
+import com.example.uaspam.ui.home.view.aktivitaspertanian.UpdateAktivitasPertanianView
 import com.example.uaspam.ui.home.view.panen.DestinasiHomePanen
 import com.example.uaspam.ui.home.view.panen.DestinasiInsertPanen
 import com.example.uaspam.ui.home.view.panen.EntryPnView
@@ -130,7 +136,7 @@ fun PengelolaHalaman(
                 },
                 navigateToItemEntry = { navController.navigate(DestinasiInsertPekerja.route) }, // Navigasi ke EntryMhsScreen
                 onDetailClick = { id_pekerja ->
-                    navController.navigate("detail_pekerja/$id_pekerja") // Navigasi ke halaman detail dengan
+                    navController.navigate("pekerja_detail/$id_pekerja") // Navigasi ke halaman detail dengan
                 }
             )
         }
@@ -162,7 +168,7 @@ fun PengelolaHalaman(
 
         // Halaman Detailpkj
         composable(
-            route = "detail_pekerja/{id_pekerja}",
+            route = "pekerja_detail/{id_pekerja}",
             arguments = listOf(navArgument("id_pekerja") { type = NavType.StringType }) // Definisikan parameter ""
         ) { backStackEntry ->
             val id_pekerja = backStackEntry.arguments?.getString("id_pekerja") ?: "" // Ambil nilai dari parameter
@@ -222,6 +228,67 @@ fun PengelolaHalaman(
             val id_panen = backStackEntry.arguments?.getString("id_panen") ?: ""
             UpdatePanenView(
                 id_panen = id_panen,
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
+
+        //----------------------------------------------------------------------------------------------------------------------------------------------
+
+        // Halaman Home
+        composable(DestinasiHomeAktivitasPertanian.route) {
+            HomeAktivitasPertanianView(
+                navigateBack = {
+                    navController.navigate(DestinasiHalamanUtama.route) {
+                        popUpTo(DestinasiHalamanUtama.route) { inclusive = true }
+                    }
+                },
+
+                navigateToItemEntry = { navController.navigate(DestinasiInsertAktivitasPertanian.route) }, // Navigasi ke EntryMhsScreen
+                onDetailClick = { id_aktivitas ->
+                    navController.navigate("detail_aktivitas/$id_aktivitas") // Navigasi ke halaman detail dengan
+                }
+            )
+        }
+
+        // Halaman Insert
+        composable(DestinasiInsertAktivitasPertanian.route) {
+            EntryAkView(navigateBack = {
+                navController.navigate(DestinasiHomeAktivitasPertanian.route) { // Navigasi kembali ke HomeScreen
+                    popUpTo(DestinasiHomeAktivitasPertanian.route) {
+                        inclusive = true // Bersihkan layar sebelumnya
+                    }
+                }
+            })
+        }
+
+        // Halaman Update aktivitas
+        composable(
+            route = "update_aktivitas/{id_aktivitas}",
+            arguments = listOf(navArgument("id_aktivitas") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val id_aktivitas = backStackEntry.arguments?.getString("id_aktivitas") ?: ""
+            UpdateAktivitasPertanianView(
+                id_aktivitas = id_aktivitas,
+                navigateBack = {
+                    navController.popBackStack() // Kembali ke halaman sebelumnya
+                }
+            )
+        }
+
+        // Halaman Detail aktivitas
+        composable(
+            route = "detail_aktivitas/{id_aktivitas}",
+            arguments = listOf(navArgument("id_aktivitas") { type = NavType.StringType }) // Definisikan parameter ""
+        ) { backStackEntry ->
+            val id_aktivitas = backStackEntry.arguments?.getString("id_aktivitas") ?: "" // Ambil nilai dari parameter
+            DetailAktivitasPertanianView(
+                id_aktivitas = id_aktivitas,
+                navigateEditAktivitas = { editId_aktivitas ->
+                    navController.navigate("update_aktivitas/$editId_aktivitas")                   // Navigasi ke halaman update dengan
+                },
                 navigateBack = {
                     navController.popBackStack() // Kembali ke halaman sebelumnya
                 }
