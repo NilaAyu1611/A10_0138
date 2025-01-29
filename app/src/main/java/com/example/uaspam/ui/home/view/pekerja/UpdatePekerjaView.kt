@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -139,7 +140,7 @@ fun FormInputPekerja(
             value = updatepeUiEvent.nama_pekerja,
             onValueChange = { onValueChange(updatepeUiEvent.copy(nama_pekerja = it)) },
             label = { Text("Nama Pekerja", color = Color.White) },
-            leadingIcon = { Icon(Icons.Default.Info, contentDescription = null, tint = iconColor) },
+            leadingIcon = { Icon(Icons.Default.Person, contentDescription = null, tint = iconColor) },
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true,
