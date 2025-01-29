@@ -1,6 +1,50 @@
 package com.example.uaspam.ui.home.viewmodel.panen
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.uaspam.model.Panen
+import com.example.uaspam.repository.PanenRepository
+import kotlinx.coroutines.launch
+
+// ViewModel untuk mengatur data dan logika form tambah mahasiswa
+class InsertPanenViewModel(private val pn: PanenRepository): ViewModel() {
+
+    // Data untuk menyimpan keadaan form (seperti input dari pengguna)
+    var insertpaUiState by mutableStateOf(InsertpaUiState())
+        private set
+
+
+    /**
+     * Inisialisasi `id_tanaman` dari parameter navigasi.
+     * Fungsi ini dipanggil saat layar di-load dan `id_tanaman` diberikan dari layar sebelumnya.
+     */
+    fun initializeWithIdTanaman(id_tanaman: String) {
+        insertpaUiState = insertpaUiState.copy(
+            insertpaUiEvent = insertpaUiState.insertpaUiEvent.copy(id_tanaman = id_tanaman)
+        )
+    }
+
+    // Fungsi untuk mengubah data form ketika ada input dari pengguna
+    fun updateInsertPnState(insertpaUiEvent: InsertpaUiEvent) {
+        insertpaUiState = InsertpaUiState(insertpaUiEvent = insertpaUiEvent) // Perbarui data berdasarkan event
+    }
+
+    // Fungsi untuk menambahkan data mahasiswa ke database
+    suspend fun insertPn() {
+        viewModelScope.launch { // Menjalankan proses di latar belakang (tidak mengganggu UI)
+            try {
+                // Mengambil data dari form dan mengirimnya ke repository
+                pn.insertPanen(insertpaUiState.insertpaUiEvent.toPn())
+            }catch (e:Exception) {
+                e.printStackTrace() // Menangani error jika terjadi masalah
+            }
+        }
+    }
+}
+
 
 // Menyimpan state form input
 data class InsertpaUiState(
