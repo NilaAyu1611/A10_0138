@@ -1,7 +1,39 @@
 package com.example.uaspam.ui.home.viewmodel.pekerja
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.uaspam.model.Pekerja
+import com.example.uaspam.repository.PekerjaRepository
+import kotlinx.coroutines.launch
 
+
+// ViewModel untuk mengatur data dan logika form tambah mahasiswa
+class InsertPekerjaViewModel(private val pkj: PekerjaRepository): ViewModel() {
+
+    // Data untuk menyimpan keadaan form (seperti input dari pengguna)
+    var insertpeUiState by mutableStateOf(InsertpeUiState())
+        private set
+
+    // Fungsi untuk mengubah data form ketika ada input dari pengguna
+    fun updateInsertPkjState(insertpeUiEvent: InsertpeUiEvent) {
+        insertpeUiState = InsertpeUiState(insertpeUiEvent = insertpeUiEvent) // Perbarui data berdasarkan event
+    }
+
+    // Fungsi untuk menambahkan data mahasiswa ke database
+    suspend fun insertPkj() {
+        viewModelScope.launch { // Menjalankan proses di latar belakang (tidak mengganggu UI)
+            try {
+                // Mengambil data dari form dan mengirimnya ke repository
+                pkj.insertPekerja(insertpeUiState.insertpeUiEvent.toPkj())
+            }catch (e:Exception) {
+                e.printStackTrace() // Menangani error jika terjadi masalah
+            }
+        }
+    }
+}
 
 // Menyimpan state form input mahasiswa
 data class InsertpeUiState(
