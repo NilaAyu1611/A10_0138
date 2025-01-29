@@ -51,7 +51,7 @@ import com.example.uaspam.ui.home.viewmodel.aktivitaspertanian.HomeakUiState
 
 
 object DestinasiHomeAktivitasPertanian: DestinasiNavigasi {
-    override val route= "home pekerja"
+    override val route= "home aktivitas"
     override val titleRes= "Daftar Aktivitas Pertanian"
 }
 
